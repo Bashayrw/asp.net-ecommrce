@@ -23,6 +23,7 @@ public class ProductRepository : IProductRepository
     public IEnumerable<Product> FindMany()
     {
         return _products;
+        
     }
     public IEnumerable<Product> CreateOne(Product product) // POST DOES NOT WORK 
     {

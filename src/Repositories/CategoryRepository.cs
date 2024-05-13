@@ -30,7 +30,9 @@ namespace CodeCrafters_backend_teamwork.src.Repositories
 
         public IEnumerable<Category> FindMany()
         {
+            _databaseContext.SaveChanges();
             return _categories;
+            
         }
 
         public IEnumerable<Category>? DeleteCategory(Guid categoryId)

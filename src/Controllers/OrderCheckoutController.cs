@@ -22,8 +22,6 @@ namespace CodeCrafters_backend_teamwork.src.Controller
 
         }
 
-
-
         [HttpGet]
         public ActionResult<IEnumerable<OrderCheckout>> FindMany()
         {
