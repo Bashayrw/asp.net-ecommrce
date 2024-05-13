@@ -30,6 +30,8 @@ namespace CodeCrafters_backend_teamwork.src.Controller
 
             // Console.WriteLine($"user Id {userId}");
             // Console.WriteLine($"user email {userEmail}");
+            Console.WriteLine($"In controller");
+            
 
             return Ok(_categoryService.FindMany());
 

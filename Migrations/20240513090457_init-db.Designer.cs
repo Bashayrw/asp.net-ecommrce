@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240513074520_init-db")]
+    [Migration("20240513090457_init-db")]
     partial class initdb
     {
         /// <inheritdoc />

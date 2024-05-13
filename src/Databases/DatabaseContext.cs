@@ -1,7 +1,6 @@
 using CodeCrafters_backend_teamwork.src.Entities;
 using CodeCrafters_backend_teamwork.src.Enums;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace CodeCrafters_backend_teamwork.src.Databases;
 public class DatabaseContext : DbContext
