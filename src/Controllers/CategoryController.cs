@@ -25,14 +25,7 @@ namespace CodeCrafters_backend_teamwork.src.Controller
         [HttpGet]
         public ActionResult<IEnumerable<CategoryReadDto>> FindMany()
         {
-            // var userId = ClaimTypes.NameIdentifier;
-            // var userEmail = ClaimTypes.Email;
-
-            // Console.WriteLine($"user Id {userId}");
-            // Console.WriteLine($"user email {userEmail}");
-            Console.WriteLine($"In controller");
             
-
             return Ok(_categoryService.FindMany());
 
         }

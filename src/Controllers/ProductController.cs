@@ -15,9 +15,9 @@ public class ProductController : CustomizedController
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<ProductReadDto>> FindMany()
+    public ActionResult<IEnumerable<ProductReadDto>> FindMany([FromQuery(Name ="searchBy")] string? searchBy)
     {
-        return Ok (_productService.FindMany());
+        return Ok (_productService.FindMany(searchBy));
     }
     [HttpGet("{productId}")]
     public Product? FindOne(Guid productId)

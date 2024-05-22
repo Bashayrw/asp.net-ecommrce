@@ -8,30 +8,36 @@ namespace CodeCrafters_backend_teamwork.src.DTOs
     public class OrderCheckoutReadDto
     {
          public Guid Id {get ; set;}
-        public int PaymentId {get ; set;}
-        public Guid UserId {get ; set;}
-        public int ShippingId {get ; set;}
+        public DateTime CreatedAt {get ; set;}
         public required string Status {get ; set;}
         public double TotalPrice {get ; set;}
+        public string Address {get; set;}
     }
 
 
      public class OrderCheckoutCreateDto
      {
-        public Guid Id {get ; set;}
-        public int PaymentId {get ; set;}
-        public int UsersId {get ; set;}
-        public int ShippingId {get ; set;}
+        public Guid ProductId {get; set;}
+        public Guid UsersId {get ; set;}
+         public string Address {get; set;}
         public required string Status {get ; set;}
         public double TotalPrice {get ; set;}
+    }
+
+    public class CheckoutCreateDto
+     {
+        public Guid StockId {get ; set;}
+    
+        public double TotalPrice {get ; set;}
+        public int Quantity {get ; set;}
     }
     
      public class OrderCheckoutUpdateDto
      {
         public Guid Id {get ; set;}
-        public int PaymentId {get ; set;}
-        public int UsersId {get ; set;}
-        public int ShippingId {get ; set;}
+        public int Payment {get ; set;}
+        public Guid UsersId {get ; set;}
+        public int Shipping {get ; set;}
         public required string Status {get ; set;}
         public double TotalPrice {get ; set;}
     }

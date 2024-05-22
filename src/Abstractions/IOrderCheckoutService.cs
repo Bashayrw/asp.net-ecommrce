@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CodeCrafters_backend_teamwork.src.DTO;
+using CodeCrafters_backend_teamwork.src.DTOs;
 using CodeCrafters_backend_teamwork.src.Entities;
 
 namespace CodeCrafters_backend_teamwork.src.Abstractions
@@ -11,9 +12,10 @@ namespace CodeCrafters_backend_teamwork.src.Abstractions
     {
         public IEnumerable<OrderCheckout> FindMany();
         public OrderCheckout? FindOne(Guid orderCheckoutId);
-        public IEnumerable<OrderCheckout> CreateOne(OrderCheckout newOrderCheckout);
+        //public IEnumerable<OrderCheckout> CreateOne(OrderCheckout newOrderCheckout);
+        public OrderCheckoutReadDto CreateOne(OrderCheckoutCreateDto order);
         public OrderCheckout UpdateOne(Guid ordercheckoutId, OrderCheckout updateOrdercheckout);
         public IEnumerable<OrderCheckout>? DeleteOne(Guid orderCheckoutId);
-        public OrderCheckout Checkout(List<OrderItemCreateDto> orderItemCreateDtos); 
+        public OrderCheckout Checkout(List<CheckoutCreateDto> orderItemCreateDtos, Guid userId); 
     }
 }

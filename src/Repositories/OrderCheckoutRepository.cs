@@ -5,24 +5,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeCrafters_backend_teamwork.src.Reository
 {
-    public class OrderCheckoutRepo : IOrderCheckoutRepository
+    public class OrderCheckoutRepository : IOrderCheckoutRepository
     {
         private DbSet<OrderCheckout> _checkouts;
 
         private DatabaseContext _databaseContext;
 
-        public OrderCheckoutRepo(DatabaseContext databaseContext)
+        public OrderCheckoutRepository(DatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
             _checkouts = databaseContext.OrderCheckouts;
         }
 
-        public IEnumerable<OrderCheckout> CreateOne(OrderCheckout newOrderCheckout)
-        {
-            _checkouts.Add(newOrderCheckout);
-            _databaseContext.SaveChanges();
-            return _checkouts;
-        }
+        // public IEnumerable<OrderCheckout> CreateOne(OrderCheckout newOrderCheckout)
+        // {
+        //     _checkouts.Add(newOrderCheckout);
+        //     _databaseContext.SaveChanges();
+        //     return _checkouts;
+        // }
+
+        public OrderCheckout CreateOne(OrderCheckout order) //new
+    {
+        _checkouts.Add(order);
+        _databaseContext.SaveChanges();
+        return order;
+    }
 
         public OrderCheckout? FindOne(Guid orderCheckoutId)
         {

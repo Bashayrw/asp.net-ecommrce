@@ -50,13 +50,14 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("payment_id");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("address");
 
-                    b.Property<Guid>("ShippingId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("shipping_id");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -74,6 +75,9 @@ namespace Backend.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_order_checkouts");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_order_checkouts_user_id");
 
                     b.ToTable("order_checkouts", (string)null);
                 });
@@ -106,6 +110,9 @@ namespace Backend.Migrations
 
                     b.HasIndex("OrderCheckoutId")
                         .HasDatabaseName("ix_order_items_order_checkout_id");
+
+                    b.HasIndex("StockId")
+                        .HasDatabaseName("ix_order_items_stock_id");
 
                     b.ToTable("order_items", (string)null);
                 });
@@ -190,32 +197,27 @@ namespace Backend.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)")
+                        .HasColumnType("text")
                         .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
+                        .HasColumnType("text")
                         .HasColumnName("first_name");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
+                        .HasColumnType("text")
                         .HasColumnName("last_name");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("text")
                         .HasColumnName("password");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("text")
                         .HasColumnName("phone_number");
 
                     b.Property<Role>("Role")
@@ -232,6 +234,18 @@ namespace Backend.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("CodeCrafters_backend_teamwork.src.Entities.OrderCheckout", b =>
+                {
+                    b.HasOne("CodeCrafters_backend_teamwork.src.Entities.User", "User")
+                        .WithMany("OrderCheckouts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_checkouts_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CodeCrafters_backend_teamwork.src.Entities.OrderItem", b =>
                 {
                     b.HasOne("CodeCrafters_backend_teamwork.src.Entities.OrderCheckout", null)
@@ -240,6 +254,13 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_order_items_order_checkouts_order_checkout_id");
+
+                    b.HasOne("CodeCrafters_backend_teamwork.src.Entities.Stock", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_items_stocks_stock_id");
                 });
 
             modelBuilder.Entity("CodeCrafters_backend_teamwork.src.Entities.Product", b =>
@@ -275,6 +296,16 @@ namespace Backend.Migrations
             modelBuilder.Entity("CodeCrafters_backend_teamwork.src.Entities.Product", b =>
                 {
                     b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("CodeCrafters_backend_teamwork.src.Entities.Stock", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("CodeCrafters_backend_teamwork.src.Entities.User", b =>
+                {
+                    b.Navigation("OrderCheckouts");
                 });
 #pragma warning restore 612, 618
         }

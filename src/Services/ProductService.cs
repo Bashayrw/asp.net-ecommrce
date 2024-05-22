@@ -21,10 +21,16 @@ public class ProductService : IProductService
         _productRepository = productRepository;
         _mapper = mapper;
     }
-    public IEnumerable<ProductReadDto> FindMany()
+    public IEnumerable<ProductReadDto> FindMany(string? searchBy)
     {
-        IEnumerable<Product> products = _productRepository.FindMany();
-        return products.Select(_mapper.Map<ProductReadDto>);
+        var products = _productRepository.FindMany();
+        if (searchBy is not null)
+        {
+            products = products.Where(product => product.Name.ToLower().Contains(searchBy.ToLower()));
+        }
+
+        var productRead = products.Select(_mapper.Map<ProductReadDto>);
+        return productRead;
     }
     public ProductReadDto CreateOne(ProductCreateDto newProduct)
     {

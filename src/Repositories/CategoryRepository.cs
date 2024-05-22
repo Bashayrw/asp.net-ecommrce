@@ -38,7 +38,11 @@ namespace CodeCrafters_backend_teamwork.src.Repositories
         public IEnumerable<Category>? DeleteCategory(Guid categoryId)
         {
 
-            _categories.Where((c) => c.Id != categoryId);
+           var foundCategory = FindOne(categoryId);
+           if (foundCategory != null)
+           {
+            _categories.Remove(foundCategory);
+           }
             _databaseContext.SaveChanges();
 
             return _categories;

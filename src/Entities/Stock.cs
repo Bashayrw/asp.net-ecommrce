@@ -19,5 +19,7 @@ namespace CodeCrafters_backend_teamwork.src.Entities
         public string? Discount { get; }
         public int Quantity { get; set; }
 
+        public List<OrderItem> OrderItems {get; set;}
+
     }
 }

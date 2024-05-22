@@ -27,6 +27,14 @@ namespace CodeCrafters_backend_teamwork.src.Services
             return _mapper.Map<OrderCheckoutReadDto>(orderCheckout);
         }
 
+        //  public OrderCheckoutReadDto CreateOne(OrderCheckoutCreateDto order) //new
+        // {
+        //     var newProduct = _mapper.Map<OrderCheckout>(order);
+        //     var createdOrder = _orderCheckoutRepo.CreateOne(newProduct);
+        //     var orderRead = _mapper.Map<OrderCheckoutReadDto>(createdOrder);
+        //     return orderRead;
+        // }
+
         public IEnumerable<OrderCheckoutReadDto> FindMany()
         {
             IEnumerable<OrderCheckout> orderCheckouts = _orderCheckoutRepo.FindMany();
@@ -60,10 +68,20 @@ namespace CodeCrafters_backend_teamwork.src.Services
             throw new NotImplementedException();
         }
 
-        public OrderCheckout Checkout(List<OrderItemCreateDto> orderItemCreateDtos)
+        public OrderCheckout Checkout(List<CheckoutCreateDto> orderItemCreateDtos, Guid userId)
         {
             // create an Order object 
             var orderCheckout = new OrderCheckout();
+
+            orderCheckout.UserId = Guid.NewGuid();
+            orderCheckout.Status = "pending";
+            orderCheckout.TotalPrice = 0;
+            orderCheckout.Address = "Ida albergintie";
+
+            _orderCheckoutRepo.CreateOne(orderCheckout);
+            Console.WriteLine($"order checkout {orderCheckout.Id}");
+            Console.WriteLine($"order userid  {orderCheckout.UserId}");
+
             // run for loop for list of orderItemCreateDtos
             foreach (var item in orderItemCreateDtos)
             {
@@ -73,15 +91,15 @@ namespace CodeCrafters_backend_teamwork.src.Services
                 orderItem.OrderCheckoutId = orderCheckout.Id;
                 orderItem.StockId = item.StockId;
                 orderItem.Quantity = item.Quantity;
-                orderItem.Price = item.Price;
+                orderItem.Price = item.TotalPrice;
                 // inside for loop, remember to inject _orderItemRepo and then _orderItemRepo.Create(orderItem)
                 _orderItemRepo.CreateOne(orderItem);
 
             }
             // mock data for userId, paymentId, ShippingId
-            orderCheckout.PaymentId = Guid.NewGuid();
-            orderCheckout.ShippingId = Guid.NewGuid();
-            orderCheckout.UserId = Guid.NewGuid();
+            //orderCheckout.Address = Guid.NewGuid();
+            // orderCheckout.Shipping = Guid.NewGuid();
+
             // outside for loop, save order inside order table 
             _orderCheckoutRepo.CreateOne(orderCheckout);
             return orderCheckout;

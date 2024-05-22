@@ -25,7 +25,6 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-
     public IEnumerable<UserReadDto> FindMany()
     {
         IEnumerable<User> users = _userRepository.FindMany();
@@ -38,23 +37,26 @@ public class UserService : IUserService
         User? user = _userRepository.FindOneByEmail(userSign.Email);
         if (user is null)
         {
-            return null;
-        }
+            throw new Exception("wrong credentials");
+        };
+
         byte[] pepper = Encoding.UTF8.GetBytes(_config["Jwt:Pepper"]!);
 
         bool isCorrectPass = PasswordUtils.VerifyPassword(userSign.Password, user.Password, pepper);
+
+        Console.WriteLine($"isCorrectPass {isCorrectPass}");
+
         if (!isCorrectPass) return null;
 
-        // the auth code here 
         var claims = new[]
-        {
-            new Claim(ClaimTypes.Name, user.FirstName.ToString()),
+             {
+            new Claim(ClaimTypes.Name, user.FirstName),
             new Claim(ClaimTypes.Role, user.Role.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
-
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SigningKey"]!));
+
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
@@ -66,13 +68,13 @@ public class UserService : IUserService
         );
 
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
         return tokenString;
     }
 
     public UserReadDto? SignUp(UserCreateDto user)
     {
         User? foundUser = _userRepository.FindOneByEmail(user.Email);
-
 
         if (foundUser is not null)
         {
@@ -84,6 +86,7 @@ public class UserService : IUserService
 
         PasswordUtils.HashPassword(user.Password, out string hashedPassword,
         pepper);
+
 
         user.Password = hashedPassword;
         User mappedUser = _mapper.Map<User>(user);
@@ -125,4 +128,3 @@ public class UserService : IUserService
     }
 
 }
-

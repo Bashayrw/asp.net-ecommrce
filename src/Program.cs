@@ -1,13 +1,19 @@
 using System.Text;
 using CodeCrafters_backend_teamwork.src.Abstractions;
+using CodeCrafters_backend_teamwork.src.Abstrations;
 using CodeCrafters_backend_teamwork.src.Databases;
 using CodeCrafters_backend_teamwork.src.Enums;
+using CodeCrafters_backend_teamwork.src.Reository;
 using CodeCrafters_backend_teamwork.src.Repositories;
+using CodeCrafters_backend_teamwork.src.Repository;
+using CodeCrafters_backend_teamwork.src.Service.cs;
 using CodeCrafters_backend_teamwork.src.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Npgsql;
+using Swashbuckle.AspNetCore.Filters;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +26,22 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(
+     options =>
+    {
+        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            Description = "Bearer token authentication",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Scheme = "Bearer"
+        }
+        );
+
+        options.OperationFilter<SecurityRequirementsOperationFilter>();
+    }
+);
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
@@ -31,6 +52,19 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+
+builder.Services.AddScoped<IOrderCheckoutService, OrderCheckoutService>();
+builder.Services.AddScoped<IOrderCheckoutRepository, OrderCheckoutRepository>();
+
+
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 
 
 
@@ -80,21 +114,19 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Should be added
+app.MapControllers();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseHttpsRedirection();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
-
-// Should be added
-app.MapControllers();
 
 app.Run();

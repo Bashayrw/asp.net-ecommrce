@@ -26,7 +26,6 @@ namespace CodeCrafters_backend_teamwork.src.Services
 
         public IEnumerable<CategoryReadDto> FindMany()
         {
-            Console.WriteLine($"In service");
             IEnumerable<Category> categories = _categoryRepository.FindMany();
             return categories.Select(_mapper.Map<CategoryReadDto>);
         }
