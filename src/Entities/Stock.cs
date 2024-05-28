@@ -13,7 +13,7 @@ namespace CodeCrafters_backend_teamwork.src.Entities
         [Required]
         public Guid ProductId { get; set; }
         [MaxLength(10)]
-        public string Size { get; set; }
+        public string? Size { get; set; }
         [Required, MaxLength(15)]
         public string Color { get; set; }
         public string? Discount { get; }

@@ -15,9 +15,9 @@ public class ProductController : CustomizedController
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<ProductReadDto>> FindMany([FromQuery(Name ="searchBy")] string? searchBy)
+    public ActionResult<IEnumerable<ProductWithStockReadDto>> FindMany([FromQuery(Name = "searchBy")] string? searchBy)
     {
-        return Ok (_productService.FindMany(searchBy));
+        return Ok(_productService.FindMany(searchBy));
     }
     [HttpGet("{productId}")]
     public Product? FindOne(Guid productId)
@@ -30,14 +30,15 @@ public class ProductController : CustomizedController
         return CreatedAtAction(nameof(CreateOne), _productService.CreateOne(product));
 
     }
-    
+
     [HttpDelete("{productId}")]
     public IEnumerable<Product>? DeleteProduct([FromRoute] Guid productId)
     {
         return _productService.DeleteProduct(productId);
     }
+
     [HttpPatch("{productId}")]
-    public Product UpdateOne(Guid productId, Product updatedProduct)
+    public Product UpdateOne(Guid productId, ProductUpdateDto updatedProduct)
     {
         return _productService.UpdateOne(productId, updatedProduct);
     }

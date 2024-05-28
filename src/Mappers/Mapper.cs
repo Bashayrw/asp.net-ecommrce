@@ -15,6 +15,9 @@ namespace CodeCrafters_backend_teamwork.src.Mappers
 
             CreateMap<ProductCreateDto, Product>();
             CreateMap<Product, ProductReadDto>();
+            CreateMap<Product, ProductWithStockReadDto>();
+            CreateMap<ProductUpdateDto, Product>()
+                        .ForAllMembers(opts => opts.Condition((src, dest, srcProperty) => srcProperty != null)); ;
 
             CreateMap<StockCreateDto, Stock>();
             CreateMap<Stock, StockReadDto>();
@@ -24,7 +27,7 @@ namespace CodeCrafters_backend_teamwork.src.Mappers
 
             CreateMap<Category, CategoryReadDto>();
             CreateMap<CategoryUpdateDto, Category>();
-            
+
 
             CreateMap<OrderCheckout, OrderCheckoutUpdateDto>();
             CreateMap<OrderCheckout, OrderCheckoutUpdateDto>();

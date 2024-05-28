@@ -28,7 +28,6 @@ namespace CodeCrafters_backend_teamwork.src.DTOs
      {
         public Guid StockId {get ; set;}
     
-        public double TotalPrice {get ; set;}
         public int Quantity {get ; set;}
     }
     

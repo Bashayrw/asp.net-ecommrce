@@ -11,6 +11,7 @@ public class ProductCreateDto
     public string Name { get; set; }
     public string? Image { get; set; }
     public double Price { get; set; }
+    public Guid? StockId { get; set; }
 
 }
 public class ProductReadDto
@@ -21,5 +22,24 @@ public class ProductReadDto
     public string Name { get; set; }
     public string? Image { get; set; }
     public double Price { get; set; }
+    public Guid StockId { get; set; }
 
+}
+
+public class ProductWithStockReadDto
+{
+    public Guid Id { get; set; }
+
+    public Guid CategoryId { get; set; }
+    public string Name { get; set; }
+    public string? Image { get; set; }
+    public double Price { get; set; }
+    public Guid? StockId { get; set; }
+    public string? Size { get; set; }
+    public int? Quantity { get; set; }
+
+}
+public class ProductUpdateDto 
+{
+    public string Name {get; set;}
 }

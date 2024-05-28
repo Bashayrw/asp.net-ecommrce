@@ -66,7 +66,7 @@ namespace CodeCrafters_backend_teamwork.src.Controller
         }
 
         [Authorize(Roles = "Admin,Customer")]
-        [HttpPost("/checkout")]
+        [HttpPost("checkout")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<OrderCheckout> Checkout([FromBody] List<CheckoutCreateDto> orderItemCreate)
@@ -79,7 +79,7 @@ namespace CodeCrafters_backend_teamwork.src.Controller
 
             if (orderItemCreate is null) return BadRequest();
             return CreatedAtAction(nameof(Checkout), _orderCheckoutService.Checkout(orderItemCreate, userGuid!));
-           
+
         }
     }
 }

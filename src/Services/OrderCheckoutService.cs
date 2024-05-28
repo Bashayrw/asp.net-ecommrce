@@ -70,13 +70,16 @@ namespace CodeCrafters_backend_teamwork.src.Services
 
         public OrderCheckout Checkout(List<CheckoutCreateDto> orderItemCreateDtos, Guid userId)
         {
+            Console.WriteLine($"Checkout in service");
+            double totalPrice = 0;
             // create an Order object 
-            var orderCheckout = new OrderCheckout();
-
-            orderCheckout.UserId = Guid.NewGuid();
-            orderCheckout.Status = "pending";
-            orderCheckout.TotalPrice = 0;
-            orderCheckout.Address = "Ida albergintie";
+            var orderCheckout = new OrderCheckout
+            {
+                UserId = userId,
+                Status = "pending",
+                TotalPrice = totalPrice,
+                Address = "Ida albergintie"
+            };
 
             _orderCheckoutRepo.CreateOne(orderCheckout);
             Console.WriteLine($"order checkout {orderCheckout.Id}");
@@ -91,7 +94,6 @@ namespace CodeCrafters_backend_teamwork.src.Services
                 orderItem.OrderCheckoutId = orderCheckout.Id;
                 orderItem.StockId = item.StockId;
                 orderItem.Quantity = item.Quantity;
-                orderItem.Price = item.TotalPrice;
                 // inside for loop, remember to inject _orderItemRepo and then _orderItemRepo.Create(orderItem)
                 _orderItemRepo.CreateOne(orderItem);
 
@@ -101,7 +103,7 @@ namespace CodeCrafters_backend_teamwork.src.Services
             // orderCheckout.Shipping = Guid.NewGuid();
 
             // outside for loop, save order inside order table 
-            _orderCheckoutRepo.CreateOne(orderCheckout);
+            _orderCheckoutRepo.UpdateOne(orderCheckout.Id, orderCheckout);
             return orderCheckout;
         }
     }

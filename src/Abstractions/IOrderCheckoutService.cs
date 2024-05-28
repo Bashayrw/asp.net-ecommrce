@@ -16,6 +16,7 @@ namespace CodeCrafters_backend_teamwork.src.Abstractions
         public OrderCheckoutReadDto CreateOne(OrderCheckoutCreateDto order);
         public OrderCheckout UpdateOne(Guid ordercheckoutId, OrderCheckout updateOrdercheckout);
         public IEnumerable<OrderCheckout>? DeleteOne(Guid orderCheckoutId);
-        public OrderCheckout Checkout(List<CheckoutCreateDto> orderItemCreateDtos, Guid userId); 
+        public OrderCheckout Checkout(List<CheckoutCreateDto> orderItemCreateDtos, Guid userId);
+
     }
 }

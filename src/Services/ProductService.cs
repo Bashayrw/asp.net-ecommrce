@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CodeCrafters_backend_teamwork.src.Entities;
 using CodeCrafters_backend_teamwork.src.Abstractions;
-using CodeCrafters_backend_teamwork.src.Controllers;
-using CodeCrafters_backend_teamwork.src.Databases;
 using CodeCrafters_backend_teamwork.src.DTOs;
 using AutoMapper;
 
@@ -21,7 +15,7 @@ public class ProductService : IProductService
         _productRepository = productRepository;
         _mapper = mapper;
     }
-    public IEnumerable<ProductReadDto> FindMany(string? searchBy)
+    public IEnumerable<ProductWithStockReadDto> FindMany(string? searchBy)
     {
         var products = _productRepository.FindMany();
         if (searchBy is not null)
@@ -29,8 +23,7 @@ public class ProductService : IProductService
             products = products.Where(product => product.Name.ToLower().Contains(searchBy.ToLower()));
         }
 
-        var productRead = products.Select(_mapper.Map<ProductReadDto>);
-        return productRead;
+        return products;
     }
     public ProductReadDto CreateOne(ProductCreateDto newProduct)
     {
@@ -50,8 +43,10 @@ public class ProductService : IProductService
         return _productRepository.DeleteProduct(productId);
     }
 
-    public Product UpdateOne(Guid productId, Product updatedProduct)
+    public Product UpdateOne(Guid productId, ProductUpdateDto updatedProduct)
     {
-        return _productRepository.UpdateOne(productId, updatedProduct);
+
+        var product = _mapper.Map<Product>(updatedProduct);
+        return _productRepository.UpdateOne(productId, product);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodeCrafters_backend_teamwork.src.Abstractions;
 using CodeCrafters_backend_teamwork.src.Databases;
+using CodeCrafters_backend_teamwork.src.DTOs;
 using CodeCrafters_backend_teamwork.src.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,20 +13,37 @@ namespace CodeCrafters_backend_teamwork.src.Repositories;
 public class ProductRepository : IProductRepository
 {
     private DbSet<Product> _products;
+    private DbSet<Stock> _stocks;
     private DatabaseContext _databasecontext;
 
     public ProductRepository(DatabaseContext databaseContext)
     {
         _products = databaseContext.Products;
+        _stocks = databaseContext.Stocks;
         _databasecontext = databaseContext;
 
     }
-    public IEnumerable<Product> FindMany()
+    public IEnumerable<ProductWithStockReadDto> FindMany()
     {
-        return _products;
-        
+        var products = from product in _products
+                       join stock in _stocks on product.Id equals stock.ProductId into ps
+                       from s in ps.DefaultIfEmpty()
+                       select new ProductWithStockReadDto
+                       {
+                           Id = product.Id,
+                           CategoryId = product.CategoryId,
+                           Name = product.Name,
+                           Image = product.Image,
+                           Price = product.Price,
+                           StockId = s.Id != null ? s.Id : null,
+                           Size = s.Size != null ? s.Size : null,
+                           Quantity = s.Quantity != null ? s.Quantity : null
+                       };
+
+        return products;
+
     }
-    public IEnumerable<Product> CreateOne(Product product) // POST DOES NOT WORK 
+    public IEnumerable<Product> CreateOne(Product product)
     {
         _products.Add(product);
         _databasecontext.SaveChanges(); // add this and the above to the other entities repos
